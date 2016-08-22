@@ -2,4 +2,5 @@
 .envrc
 .direnv
 __pycache__
-.ipynb_checkpoints
+*.pyc
+shopping-cart/shopping/secrets.py
