@@ -29,7 +29,7 @@ class Cart(models.Model):
     user = models.OneToOneField(User)
 
     def __str__(self):
-        return self.cart_product_set.all()
+        return self.cartproduct_set.all()
 
 
 class CartProduct(models.Model):
@@ -38,7 +38,7 @@ class CartProduct(models.Model):
     quantity = models.IntegerField(validators=[MinValueValidator(0)])
 
     def __str__(self):
-        return "{}: {}".format(self.product, str(self.quantity))
+        return "{}: Quantity: {}".format(self.product, str(self.quantity))
 
 
 #
