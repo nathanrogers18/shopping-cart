@@ -5,22 +5,6 @@ from django.utils import timezone
 
 
 # Create your models here.
-class Cart(models.Model):
-    cart_product = models.OneToManyField(CartProduct)
-    user = models.OneToOneField(User)
-
-    def __str__(self):
-        return self.cart_product_set.all()
-
-
-class CartProduct(models.Model):
-    product = models.ManyToManyField(Product)
-    quantity = models.IntegerField(validators=[MinValueValidator(0)])
-
-    def __str__(self):
-        return "{}: {}".format(self.product, str(self.quantity))
-
-
 class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.DecimalField(validators=[MinValueValidator(0)],
@@ -28,14 +12,34 @@ class Product(models.Model):
     stock = models.IntegerField()
 
     CATEGORY_CHOICES = (
-        "Electronics",
-        "Books",
-        "Music",
+        ("elec", "Electronics"),
+        ("book", "Books"),
+        ("music", "Music"),
     )
-    category = CharField(choices=CATEGORY_CHOICES)
+    category = models.CharField(choices=CATEGORY_CHOICES, max_length=15)
 
     def __str__(self):
-        return "{}: Price: {}, Stock: {}, ".(name, price, stock, category)
+        return "{}: Price: {}, Stock: {}, ".format(self.name,
+                                                   self.price,
+                                                   self.stock,
+                                                   self.category)
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(User)
+
+    def __str__(self):
+        return self.cart_product_set.all()
+
+
+class CartProduct(models.Model):
+    product = models.ForeignKey(Product)
+    cart = models.ForeignKey(Cart)
+    quantity = models.IntegerField(validators=[MinValueValidator(0)])
+
+    def __str__(self):
+        return "{}: {}".format(self.product, str(self.quantity))
+
 
 #
 # class Order(models.Model):
